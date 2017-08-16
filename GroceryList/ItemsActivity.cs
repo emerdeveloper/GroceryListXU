@@ -16,7 +16,10 @@ namespace GroceryList
 			SetContentView(Resource.Layout.Items);
 
 			var lv = FindViewById<ListView>(Resource.Id.listView);
-			lv.Adapter = new ArrayAdapter<Item>(this, Android.Resource.Layout.SimpleListItem1, Android.Resource.Id.Text1, MainActivity.Items);	
+			lv.Adapter = new ArrayAdapter<Item>(this, 
+                Android.Resource.Layout.SimpleListItem1, 
+                Android.Resource.Id.Text1, 
+                MainActivity.Items);	
 			lv.ItemClick += OnItemClick;
 		}
 
@@ -24,7 +27,9 @@ namespace GroceryList
 		{
 			int position = e.Position; // e.Position is the position in the list of the item the user touched
 
-			// TODO
+            var intent = new Intent(this, typeof(DetailsActivity));
+            intent.PutExtra("ItemPosition", position);//this a bundle inside an Intent to be passed betweewn Activity 
+            StartActivity(intent);
 		}
 	}
 }

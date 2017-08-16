@@ -35,17 +35,31 @@ namespace GroceryList
 		void OnAddItemClick(object sender, EventArgs e)
 		{
             var intent = new Intent(this, typeof(AddItemActivity));//Explicit Intent
-            StartActivity(intent);
-		}
+            //init and go to other activity. its useful when we don't want retrieve data of go back 
+            //StartActivity(intent);
+            //this is the same that StartActivity, but this allows sent a identifer to identity an Activity of go back, 
+            // this value will be useful when come back from second activity 
+            StartActivityForResult(intent,//Bundle
+                100);//identifer
+        }
 
 		void OnAboutClick(object sender, EventArgs e)
 		{
             StartActivity(typeof(AboutActivity));//Intent
 		}
 
-		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        //This method is execute when we come back here from the second activity
+        //we use this method to retrieve data that come from other Activity
+		protected override void OnActivityResult(int requestCode, //this value help to identify the activity from we come back, this code is send from other Activity and have to the same that we send start, //identifer that we send initially when we use the method OnAddItemClick  
+            Result resultCode, //A result code is an enum that an Activity uses to indicate success/failure
+            Intent data)//The Intent loaded by the Target Activity
 		{
-			// TODO
-		}
+            if (resultCode == Result.Ok && requestCode == 100) {
+                //Retrieve the item name and count from the Intent Extras. 
+                string name = data.GetStringExtra("ItemName");
+                int count = data.GetIntExtra("ItemCount", -1);
+                Items.Add(new Item(name , count));
+            }
+        }
 	}
 }
